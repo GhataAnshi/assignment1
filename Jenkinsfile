@@ -15,7 +15,7 @@ pipeline {
         stage('Scan using SonarQube') {
             steps {
                 echo "Pulling "+env.GIT_BRANCH
-                bat 'mvn -f ./my-app/pom.xml package sonar:sonar -Dsonar.login=c3ecc1b7d6d7239c5681d0df589e97c52368ffd1'
+                //bat 'mvn -f ./my-app/pom.xml package sonar:sonar -Dsonar.login=c3ecc1b7d6d7239c5681d0df589e97c52368ffd1'
                 
             }
 
@@ -28,7 +28,10 @@ pipeline {
                           bat 'mvn -f ./my-app/pom.xml test'
                    }
                 post {
-                  success {
+                   always {
+                emailext body: 'Notification Email', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Production Notificat'
+                }
+                 success {
                        echo "Selenium Test Cases Passed"
                   }
 
