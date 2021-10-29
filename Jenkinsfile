@@ -1,7 +1,7 @@
 def user
 node {
   wrap([$class: 'BuildUser']) {
-    user = env.BUILD_USER_ID
+    user = env.BUILD_USER
   }
 emailext mimeType: 'text/html',
                  subject: "[Jenkins]${currentBuild.fullDisplayName}",
