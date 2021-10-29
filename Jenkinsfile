@@ -49,13 +49,13 @@ pipeline {
                  echo "Deploying to Production"
                  bat 'mvn -f ./my-app/pom.xml package'
             }
+            post {
+                always {
+                emailext body: 'Notification Email', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Production Notificat'
+                }
+            }
         }
     
-        post {
-             always {
-                 emailext body: 'Notification Email', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Production Notificat'
-             }
-        }
     }
 }
 
