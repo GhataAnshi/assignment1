@@ -33,6 +33,13 @@ pipeline {
 			  bat 'mvn -f ./my-app/pom.xml test'
                    }
                 post {
+
+               always {
+                emailext body: 'Notification Email', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Production Notificat'
+                }
+
+
+
                  success {
                        echo "Selenium Test Cases Passed"
                   }
