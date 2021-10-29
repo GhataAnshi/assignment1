@@ -22,7 +22,7 @@ pipeline {
         }
         stage('QA environment'){
            when {
-                 expression { return env.GIT_BRANCH == 'QA_Branch'; }
+                 expression { return env.GIT_BRANCH == 'origin/QA_Branch'; }
                 }
                 steps {
                           bat 'mvn -f ./my-app/pom.xml test'
