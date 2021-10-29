@@ -9,20 +9,15 @@ emailext mimeType: 'text/html',
                  body: '''<a href="${BUILD_URL}input">click to approve</a>'''
 }
 emailext mimeType: 'text/html',
-                 subject: "[Jenkins]${currentBuild.fullDisplayName}",
+                 subject: "Builld Approval",
                  to: "ghatasaxena27@gmail.com",
                  body: '''<a href="${BUILD_URL}input">click to approve</a>'''
 
         def userInput = input id: 'userInput',
                               message: 'Let\'s promote?', 
                               submitterParameter: 'submitter',
-                              submitter: 'Ghata Saxena',
-                              parameters: [
-                                [$class: 'TextParameterDefinition', defaultValue: 'sit', description: 'Environment', name: 'env'],
-                                [$class: 'TextParameterDefinition', defaultValue: 'k8s', description: 'Target', name: 'target']]
+                              submitter: 'admin',
 
-        echo ("Env: "+userInput['env'])
-        echo ("Target: "+userInput['target'])
         echo ("submitted by: "+userInput['submitter'])
 
 
