@@ -35,7 +35,7 @@ pipeline {
                }
         }
 
-        stage('Deploy to Production') {
+/*        stage('Deploy to Production') {
                   input{
                         message "Should we continue?"
                         ok "Yes"
@@ -53,7 +53,7 @@ pipeline {
                 emailext body: 'Notification Email', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Production Notificat'
                 }
             }
-        }
+        }*/
     
     }
 }
