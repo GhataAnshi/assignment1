@@ -1,7 +1,7 @@
 def user
 node {
   wrap([$class: 'BuildUser']) {
-    user = $(echo $BUILD_CAUSE_JSON | tr "," "\n" | grep "userId" | awk -F\" '{print $4}')
+    user = env.BUILD_USER_ID
   }
 emailext mimeType: 'text/html',
                  subject: "[Jenkins]${currentBuild.fullDisplayName}",
