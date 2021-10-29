@@ -13,14 +13,6 @@ emailext mimeType: 'text/html',
                  to: "ghatasaxena27@gmail.com",
                  body: '''<a href="${BUILD_URL}input">click to approve</a>'''
 
-        def userInput = input id: 'userInput',
-                              message: 'Let\'s promote?', 
-                              submitterParameter: 'submitter',
-                              submitter: 'admin',
-
-        echo ("submitted by: "+userInput['submitter'])
-
-
 pipeline {
     agent any
     stages {
