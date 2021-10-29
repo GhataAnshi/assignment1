@@ -31,20 +31,19 @@ pipeline {
                   success {
                        echo "Selenium Test Cases Passed"
                   }
-                }
+
+               }
         }
 
         stage('Deploy to Production') {
-           when {
-                 branch 'Development'
-                }
-                  input {
+                  input{
                         message "Should we continue?"
                         ok "Yes"
                     }
-              when {
-                expression { user == 'hardCodeApproverJenkinsId'}
-            }
+                    when {
+                        expression { user == 'hardCodeApproverJenkinsId'}
+                    }
+
             steps {
                  echo "Deploying to Production"
                  bat 'mvn -f ./my-app/pom.xml package'
