@@ -25,12 +25,10 @@ pipeline {
                  expression { return env.GIT_BRANCH == 'origin/QA_Branch'; }
                 }
                 steps {
-                          bat 'mvn -f ./my-app/pom.xml test'
+                          echo env.BUILD_USER_ID
+			  bat 'mvn -f ./my-app/pom.xml test'
                    }
                 post {
-                   always {
-                emailext body: 'Notification Email', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Production Notificat'
-                }
                  success {
                        echo "Selenium Test Cases Passed"
                   }
@@ -38,7 +36,7 @@ pipeline {
                }
         }
 
-/*        stage('Deploy to Production') {
+        stage('Deploy to Production') {
                   input{
                         message "Should we continue?"
                         ok "Yes"
@@ -56,7 +54,7 @@ pipeline {
                 emailext body: 'Notification Email', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Production Notificat'
                 }
             }
-        }*/
+        }
     
     }
 }
