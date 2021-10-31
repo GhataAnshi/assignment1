@@ -14,9 +14,57 @@ emailext mimeType: 'text/html',
                  body: '''<a href="${BUILD_URL}input">click to approve</a>'''
 
 pipeline {
+
+   environment {
+        registry = "assignemt2"
+        registryCredential = 'gtaa'
+        dockerImage = 'maven-application-assignment'
+    }
+
     agent any
     stages {
-        stage('Scan using SonarQube') {
+             stage('Cloning our Git') { 
+
+            steps { 
+
+                git 'https://github.com/GhataAnshi/Assignment2.git 
+
+            }
+
+        } 
+        stage('Building our image') { 
+
+            steps { 
+
+                script { 
+
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER" 
+
+                }
+
+            } 
+
+        }
+        stage('Execute Cotainer') {
+            agent {
+                    docker {
+                        image 'maven-application-assignment:$BUILD_NUMBER'
+                        args '-v $HOME/.m2:/root/.m2'
+                    }
+                }
+
+
+            steps {
+                sh 'docker run maven-application:1.0.0'
+            }
+        }
+
+
+
+
+
+
+     stage('Scan using SonarQube') {
             steps {
                 echo "Pulling "+env.GIT_BRANCH
                 //bat 'mvn -f ./my-app/pom.xml package sonar:sonar -Dsonar.login=c3ecc1b7d6d7239c5681d0df589e97c52368ffd1'
