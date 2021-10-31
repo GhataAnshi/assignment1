@@ -8,10 +8,6 @@ emailext mimeType: 'text/html',
                  to: "ghatasaxena27@gmail.com",
                  body: '''<a href="${BUILD_URL}input">click to approve</a>'''
 }
-emailext mimeType: 'text/html',
-                 subject: "Builld Approval",
-                 to: "ghatasaxena27@gmail.com",
-                 body: '''<a href="${BUILD_URL}input">click to approve</a>'''
 
 pipeline {
 
