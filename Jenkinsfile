@@ -27,7 +27,7 @@ pipeline {
 
             steps { 
 
-                git 'https://github.com/GhataAnshi/Assignment2.git 
+                git 'https://github.com/GhataAnshi/Assignment2.git' 
 
             }
 
