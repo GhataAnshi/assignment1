@@ -1,4 +1,7 @@
 pipeline {
+environment { 
+        dockerImage = '' 
+    }
     agent any
     stages {
         stage('Build Application') {
@@ -12,7 +15,7 @@ pipeline {
         stage('Building our image') { 
             steps { 
                 script { 
-                    docker build -t app-test:$BUILD_NUMBER
+                    dockerImage = docker.build registry + ":%BUILD_NUMBER%"
                 }
             } 
         }
