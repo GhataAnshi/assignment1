@@ -23,15 +23,7 @@ pipeline {
 
     agent any
     stages {
-             stage('Cloning our Git') { 
 
-            steps { 
-
-                git 'https://github.com/GhataAnshi/Assignment2.git' 
-
-            }
-
-        } 
         stage('Building our image') { 
 
             steps { 
