@@ -12,8 +12,6 @@ emailext mimeType: 'text/html',
 pipeline {
 
    environment {
-        registry = "assignemt2"
-        registryCredential = 'gtaa'
         dockerImage = 'maven-application-assignment'
     }
 
@@ -21,66 +19,43 @@ pipeline {
     stages {
 
         stage('Building our image') { 
-
             steps { 
-
                 script { 
-
                     dockerImage = docker.build dockerImage + ":$BUILD_NUMBER" 
-
                 }
-
             } 
-
         }
+
+
         stage('Execute Cotainer') {
-            agent {
-                    docker {
-                        image 'maven-application-assignment:$BUILD_NUMBER'
-                        args '-v $HOME/.m2:/root/.m2'
+               steps {
+                    script
+                    { withCredentials([usernamePassword(credentialsId: 'gtaa', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) 
+                        {
+                        docker.withRegistry('', 'gtaa') {
+                            sh "docker pull gtaa/maven-application-assignment:1.0.0"
+                            sh "docker run gtaa/maven-application-assignment:1.0.0"
+                            }
+                        }
                     }
                 }
-
-
-            steps {
-                sh 'docker run maven-application:1.0.0'
-            }
         }
 
-
-
-
-
-
-     stage('Scan using SonarQube') {
-            steps {
-                echo "Pulling "+env.GIT_BRANCH
-                //bat 'mvn -f ./my-app/pom.xml package sonar:sonar -Dsonar.login=c3ecc1b7d6d7239c5681d0df589e97c52368ffd1'
-                
-            }
-
-        }
         stage('QA environment'){
            when {
                  expression { return env.GIT_BRANCH == 'origin/QA_Branch'; }
                 }
                 steps {
-                          echo env.BUILD_USER_ID
-			  bat 'mvn -f ./my-app/pom.xml test'
+                   bat 'mvn -f ./my-app/pom.xml test'
                    }
                 post {
-
-               always {
-                emailext body: 'Notification Email', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Production Notificat'
-                }
-
-
-
-                 success {
+                    always {
+                          emailext body: 'Notification Email', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Production Notificat'
+                          }
+                    success {
                        echo "Selenium Test Cases Passed"
-                  }
-
-               }
+                            }
+                     }
         }
 
         stage('Deploy to Production') {
