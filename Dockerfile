@@ -1,6 +1,8 @@
 FROM maven:latest AS build
 COPY my-app/src /home/app/src
 COPY my-app/pom.xml /home/app
+COPY my-app/TestNG.xml /home/app
+
 RUN mvn -f /home/app/pom.xml package
 
 FROM openjdk:latest
