@@ -12,7 +12,7 @@ pipeline {
         stage('Building our image') { 
             steps { 
                 script { 
-                    dockerImage = docker.build dockerImage + ":%BUILD_NUMBER%" 
+                    docker build app-test:%BUILD_NUMBER%
                 }
             } 
         }
