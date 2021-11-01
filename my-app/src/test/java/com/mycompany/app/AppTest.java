@@ -17,7 +17,7 @@ public class AppTest
     @Test
     public void shouldAnswerWithTrue()
     {
-        WebDriverManager.chromedriver().browserVersion("95.0.4638.69").setup();
+        WebDriverManager.chromedriver().browserVersion("95.0.4638.54").setup();
         WebDriver driver = new ChromeDriver();
         String baseUrl = "http://demo.guru99.com/test/newtours/";
         String expectedTitle = "Welcome: Mercury Tours";
