@@ -14,72 +14,84 @@ pipeline {
     agent any
     stages {
 
-     /*   stage('Building our image') { 
+        stage('Code pull from Github') { 
             steps { 
-                script { 
-                    dockerImage = docker.build dockerImage + ":$BUILD_NUMBER" 
+                checkout scm
+            } 
+        }
+        stage('Build Application') { 
+            steps { 
+                sh ' mvn -f ./my-app/pom.xml clean package'
+            } 
+        }
+
+        stage('Scan with SonarQube') { 
+            steps { 
+                withSonarQubeEnv('SonarQubeToken'){
+                   bat 'mvn sonar:sonar'
                 }
             } 
-        }*/
-
-
-        stage('Execute Cotainer') {
-               steps {
-                    script
-                    { withCredentials([usernamePassword(credentialsId: 'gtaa', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) 
-                        {
-                        docker.withRegistry('', 'gtaa') {
-                            sh "docker pull gtaa/maven-application-assignment:1.0.0"
-                            sh "docker run gtaa/maven-application-assignment:1.0.0"
-                            }
-                        }
-                    }
-                }
         }
 
-        stage('QA environment'){
-           when {
-                 expression { return env.GIT_BRANCH == 'origin/QA_Branch'; }
+        stage('Test the QA_Branch') { 
+            when{
+                    expression { return env.GIT_BRANCH == 'origin/QA_Branch'; }
                 }
-         				steps{
-				script{
-                  try {
-                     sh 'mvn -f ./my-app/pom.xml test'
-                     currentBuild.result = 'SUCCESS'
+            steps{
+                script{
+                        try {
+                            sh 'mvn -f ./my-app/pom.xml test'
+                            currentBuild.result = 'SUCCESS'
+                            }
+                        catch (err) {
+                            currentBuild.result = 'FAILURE'
+                        }
                    }
-                   catch (err) {
-                       currentBuild.result = 'FAILURE'
-                     }
-                   }
-                   }
+                }
+
                 post {
                     always {
-               mail to: 'ghatasaxena27@gmail.com',
-      subject: "Status of pipeline: ${currentBuild.fullDisplayName}",
-      body: """Hi, The last buil result is ${currentBuild.result}.
-Please <a href="${env.BUILD_URL}input/">approve me</a>!
-"""
-                     }
-                }
+                    mail to: 'ghatasaxena27@gmail.com',
+                        subject: "Status of pipeline: ${currentBuild.fullDisplayName}",
+                        body: """Hi, The last buil result is ${currentBuild.result}.
+                        Please <a href="${env.BUILD_URL}input/">Click link to approve</a>!
+                        """
+                        }
+                    }
+            }
 
+
+        stage('Build Docker Image, Push to Repositoy') {
+                input{
+                        message "Should we continue?"
+                        
+                    }
+                steps {
+                    script{withCredentials([usernamePassword(credentialsId: 'gtaa', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        docker.withRegistry('', 'gtaa') {
+                            sh "docker tag maven-application-assignment:${BUILD_NUMBER} gtaa/maven-application-assignment:${BUILD_NUMBER}"
+                            sh "docker push gtaa/maven-application-assignment:${BUILD_NUMBER}"
+                        }
+                    }}
+                }
         }
 
-        stage('Deploy to Production') {
-		                  input{
-                        message "Should we continue?"
-                        ok "Yes"
-                    }
+        stage('Executing Docker Container') {
+
             steps {
-                 echo "Deploying to Production"
-                 bat 'mvn -f ./my-app/pom.xml package'
-		// sh 'java -cp C:\Windows\System32\config\systemprofile\AppData\Local\Jenkins\.jenkins\workspace\piepline_sonar\my-app\target\my-app-1.0-SNAPSHOT.jar com.mycompany.app.App'
+                    script {
+                        docker.withRegistry('', 'gtaa') {
+                        sh "docker pull gtaa/maven-application-assignment:${BUILD_NUMBER}"
+                        sh "docker run gtaa/maven-application-assignment:${BUILD_NUMBER}"
+                        }
+                    }
             }
             post {
-		    always{
-                mail to: 'ghatasaxena27@gmail.com',
-      subject: "Status of pipeline: ${currentBuild.fullDisplayName}",
-      body: "Hi, The last buil result is ${currentBuild.result}."
-                     }
+                 always{
+                    mail to: 'ghatasaxena27@gmail.com',
+                    subject: "Status of pipeline: ${currentBuild.fullDisplayName}",
+                    body: "Hi, The last buil result is ${currentBuild.result}."
+                    }
             }
         }
     
