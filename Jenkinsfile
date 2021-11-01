@@ -18,13 +18,13 @@ pipeline {
     agent any
     stages {
 
-        stage('Building our image') { 
+     /*   stage('Building our image') { 
             steps { 
                 script { 
                     dockerImage = docker.build dockerImage + ":$BUILD_NUMBER" 
                 }
             } 
-        }
+        }*/
 
 
         stage('Execute Cotainer') {
@@ -41,7 +41,7 @@ pipeline {
                 }
         }
 
-       /* stage('QA environment'){
+        stage('QA environment'){
            when {
                  expression { return env.GIT_BRANCH == 'origin/QA_Branch'; }
                 }
@@ -56,7 +56,7 @@ pipeline {
                        echo "Selenium Test Cases Passed"
                             }
                      }
-        }*/
+        }
 
         stage('Deploy to Production') {
                   input{
