@@ -56,7 +56,9 @@ pipeline {
                     always {
                mail to: 'ghatasaxena27@gmail.com',
       subject: "Status of pipeline: ${currentBuild.fullDisplayName}",
-      body: "${env.BUILD_URL} has result ${currentBuild.result}"
+      body: """
+Please <a href="${env.BUILD_URL}input/">approve me</a>!
+"""
                      }
                 }
 
