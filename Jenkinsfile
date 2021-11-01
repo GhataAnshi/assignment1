@@ -72,7 +72,7 @@ Please <a href="${env.BUILD_URL}input/">approve me</a>!
             steps {
                  echo "Deploying to Production"
                  bat 'mvn -f ./my-app/pom.xml package'
-		 sh 'java -cp C:\Windows\System32\config\systemprofile\AppData\Local\Jenkins\.jenkins\workspace\piepline_sonar\my-app\target\my-app-1.0-SNAPSHOT.jar com.mycompany.app.App'
+		// sh 'java -cp C:\Windows\System32\config\systemprofile\AppData\Local\Jenkins\.jenkins\workspace\piepline_sonar\my-app\target\my-app-1.0-SNAPSHOT.jar com.mycompany.app.App'
             }
             post {
 		    always{
