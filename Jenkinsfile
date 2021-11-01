@@ -45,17 +45,17 @@ pipeline {
            when {
                  expression { return env.GIT_BRANCH == 'origin/QA_Branch'; }
                 }
-              try {
-                steps {
-                   bat 'mvn -f ./my-app/pom.xml test'
-                   }
-                 currentBuild.result = 'SUCCESS'
+         				steps{
+				script{
+                  try {
+                     sh 'mvn -f ./my-app/pom.xml test'
+                     currentBuild.result = 'SUCCESS'
                    }
                    catch (err) {
                        currentBuild.result = 'FAILURE'
                      }
-
-
+                   }
+                   }
                 post {
                     always {
                      mail to: 'ghatasaxena27@gmail.com',
