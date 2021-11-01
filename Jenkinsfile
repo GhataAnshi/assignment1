@@ -3,10 +3,6 @@ node {
   wrap([$class: 'BuildUser']) {
     user = env.BUILD_USER_ID
   }
-emailext mimeType: 'text/html',
-                 subject: "[Jenkins]${currentBuild.fullDisplayName}",
-                 to: "ghatasaxena27@gmail.com",
-                 body: '''<a href="${BUILD_URL}input">click to approve</a>'''
 }
 
 pipeline {
@@ -59,8 +55,10 @@ pipeline {
                 post {
                     always {
                      mail to: 'ghatasaxena27@gmail.com',
-          subject: "Status of pipeline: ${currentBuild.fullDisplayName}",
-          body: "${env.BUILD_URL} has result ${currentBuild.result}"
+                     subject: "Status of pipeline: ${currentBuild.fullDisplayName}",
+                      body: """
+                            Please <a href="${env.BUILD_URL}input/">approve me</a>!
+                            ""","${env.BUILD_URL} has result ${currentBuild.result}"
 
                      }
                 }
