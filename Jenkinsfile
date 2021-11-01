@@ -60,7 +60,13 @@ pipeline {
                     }
             }
 
-
+        stage('Building docker image') { 
+            steps { 
+                script { 
+                    dockerImage = docker.build dockerImage 
+                }
+            } 
+        }
         stage('Build Docker Image, Push to Repositoy') {
                 input{
                         message "Should we continue?"
@@ -69,7 +75,7 @@ pipeline {
                 steps {
                     script{withCredentials([usernamePassword(credentialsId: 'gtaa', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         docker.withRegistry('', 'gtaa') {
-                            sh "docker tag maven-application-assignment:${BUILD_NUMBER} gtaa/maven-application-assignment:${BUILD_NUMBER}"
+                            sh "docker tag maven-application-assignment gtaa/maven-application-assignment:${BUILD_NUMBER}"
                             sh "docker push gtaa/maven-application-assignment:${BUILD_NUMBER}"
                         }
                     }}
