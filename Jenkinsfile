@@ -27,7 +27,7 @@ pipeline {
 
         stage('Scan with SonarQube') { 
             steps { 
-                withSonarQubeEnv('SonarQubeToken'){
+                withSonarQubeEnv('sonarqube'){
                    bat 'mvn sonar:sonar'
                 }
             } 
