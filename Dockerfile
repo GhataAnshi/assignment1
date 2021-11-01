@@ -1,11 +1,11 @@
 FROM maven:latest AS build
-FROM ubuntu
+#FROM ubuntu
 COPY my-app/src /home/app/src
 COPY my-app/pom.xml /home/app
 COPY my-app/TestNG.xml /home/app
 
-ARG CHROME_VERSION="95.0.4638.69"
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+#ARG CHROME_VERSION="95.0.4638.69"
+#RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
   && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
   && apt-get update -qqy \
   && apt-get -qqy install \
