@@ -65,6 +65,10 @@ Please <a href="${env.BUILD_URL}input/">approve me</a>!
         }
 
         stage('Deploy to Production') {
+		                  input{
+                        message "Should we continue?"
+                        ok "Yes"
+                    }
             steps {
                  echo "Deploying to Production"
                  bat 'mvn -f ./my-app/pom.xml package'
