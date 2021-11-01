@@ -1,4 +1,5 @@
 FROM maven:latest AS build
+FROM ubuntu
 COPY my-app/src /home/app/src
 COPY my-app/pom.xml /home/app
 COPY my-app/TestNG.xml /home/app
