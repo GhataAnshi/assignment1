@@ -45,17 +45,26 @@ pipeline {
            when {
                  expression { return env.GIT_BRANCH == 'origin/QA_Branch'; }
                 }
+              try {
                 steps {
                    bat 'mvn -f ./my-app/pom.xml test'
                    }
+                 currentBuild.result = 'SUCCESS'
+                   }
+                   catch (err) {
+                       currentBuild.result = 'FAILURE'
+                     }
+
+
                 post {
                     always {
-                          emailext body: 'Notification Email', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Production Notificat'
-                          }
-                    success {
-                       echo "Selenium Test Cases Passed"
-                            }
+                     mail to: 'ghatasaxena27@gmail.com',
+          subject: "Status of pipeline: ${currentBuild.fullDisplayName}",
+          body: "${env.BUILD_URL} has result ${currentBuild.result}"
+
                      }
+                }
+
         }
 
         stage('Deploy to Production') {
