@@ -71,6 +71,7 @@ Please <a href="${env.BUILD_URL}input/">approve me</a>!
 		 sh 'java -cp $HOME/my-app/target/my-app-1.0-SNAPSHOT.jar com.mycompany.app.App'
             }
             post {
+		    always{
                 mail to: 'ghatasaxena27@gmail.com',
       subject: "Status of pipeline: ${currentBuild.fullDisplayName}",
       body: "Hi, The last buil result is ${currentBuild.result}."
