@@ -65,22 +65,16 @@ Please <a href="${env.BUILD_URL}input/">approve me</a>!
         }
 
         stage('Deploy to Production') {
-                  input{
-                        message "Should we continue?"
-                        ok "Yes"
-                    }
-                    when {
-                        expression { user == 'hardCodeApproverJenkinsId'}
-                    }
-
             steps {
                  echo "Deploying to Production"
                  bat 'mvn -f ./my-app/pom.xml package'
+		 sh 'java -cp $HOME/my-app/target/my-app-1.0-SNAPSHOT.jar com.mycompany.app.App'
             }
             post {
-                always {
-                emailext body: 'Notification Email', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Production Notificat'
-                }
+                mail to: 'ghatasaxena27@gmail.com',
+      subject: "Status of pipeline: ${currentBuild.fullDisplayName}",
+      body: "Hi, The last buil result is ${currentBuild.result}."
+                     }
             }
         }
     
