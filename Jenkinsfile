@@ -21,14 +21,14 @@ pipeline {
         }
         stage('Build Application') { 
             steps { 
-                sh ' mvn -f ./my-app/pom.xml clean package'
+                sh ' mvn -f ./pom.xml clean package'
             } 
         }
 
         stage('Scan with SonarQube') { 
             steps { 
                 withSonarQubeEnv('sonarqube'){
-                   bat 'mvn -f ./my-app/pom.xml sonar:sonar'
+                   bat 'mvn -f ./pom.xml sonar:sonar'
                 }
             } 
         }
